@@ -1,5 +1,7 @@
 # React
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ea8f0201-40a0-494c-b8e1-f463ec401209/deploy-status)](https://app.netlify.com/sites/webchemist-react-study/deploys)
+
 ### 1일차 (2019년 09월 23일)
 
 > 이번주 주요 내용:
@@ -7,7 +9,6 @@
 > 1. jQuery와는 다르게 생각해야합니다. ( state 중심 )
 > 2. Components를 조합하여 페이지를 만든 법에 익숙해져야합니다.
 > 3. React는 프레임워크가 아닌 라이브러리입니다, 즉 사용하는 기술들은 사용자에 의해서 변경이 심하기 때문에 나만의 또는 따라해서 나의 것으로 만드는 구성이 필요합니다.
-> 4.
 
 1. jQuery에서 ReactJS, VueJS, AngularJS로..
 
