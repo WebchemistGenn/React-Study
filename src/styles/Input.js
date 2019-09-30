@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const Input = ({ label="", type = "text" }) => {
+const Input = ({ label = "", ...props }) => {
+
   return (
     <Wrap>
       <Label>{label}</Label>
-      <InputStyle type={type} />
+      <InputStyle {...props} />
     </Wrap>
   )
 }

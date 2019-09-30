@@ -1,46 +1,43 @@
-// component에 'import React from "react"'는 반드시 필요합니다.
-import React, { useState } from 'react';
-import styled from "styled-components";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
 
-// 외부에서 만든 Component를 다음과 같이 불러올 수 있습니다.
-import Input from "./components/Input";
-import Button from "./components/Button";
+import Layout from "./layouts/DefaultLayout";
+import HomeView from './views/Home';
+import TodoView from './views/Todo';
 
-function App() {
-  // 다음과 같이 state 값을 생성할 수 있고 앞의 title은 변수로, setTitle은 변경함수로 사용합니다.
-  const [ title, setTitle ] = useState("LOGIN");
+const InitStyle = createGlobalStyle`
+  ${reset};
 
-  const handleChange = () => {
-    // title의 값을 변경할 때 반드시 다음과 같이 변경함수를 이용하여야 render가 다시 일어나서 변동값을 적용 시킵니다.
-    setTitle("ReactJS!!!");
+  html, body, #root {
+    height: 100%;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
+  * {
+    box-sizing: border-box;
+    line-height: 1.2;
+  }
+`;
+
+const App = () => {
   return (
-    // 최상위에는 반드시 다음과 같이 div 등으로 감싸야 합니다.
-    <Wrap>
-      <h1>{title}</h1>
-      <Input label="E-Mail" type="text" />
-      <Input label="Password" type="password" />
-      <Button onClick={handleChange}>Click</Button>
-    </Wrap>
-
-    // 다음과 같이 div로 감싸지 않고 2개의 dom일때는 에러발생
-    // <h1>{title}</h1>
-    // <button onClick={handleChange}>Click</button>
+    <Router>
+      <InitStyle />
+      <Layout>
+        <Switch>
+          <Route exact path="/" component={HomeView} />
+          <Route path="/todo" component={TodoView} />
+          <Redirect to="/" />
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 
 export default App;
-
-const Wrap = styled.div`
-  width: 500px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 1px solid #eee;
-
-  /* 다음과 같이 scss형식으로 작성이 가능합니다. */
-  h1 {
-    text-align: center;
-  }
-`;
