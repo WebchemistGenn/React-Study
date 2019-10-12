@@ -1,11 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import React, { useState, useReducer } from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 import Layout from "./layouts/DefaultLayout";
 import HomeView from './views/Home';
 import TodoView from './views/Todo';
+
+import { Context } from "./Context";
+import { Reducer, reducers, init } from "./Reducer";
 
 const InitStyle = createGlobalStyle`
   ${reset};
@@ -26,17 +29,24 @@ const InitStyle = createGlobalStyle`
 `;
 
 const App = () => {
+  const [commonCount, setCommonCount] = useState(0);
+  const [props, dispatch] = useReducer(reducers, init);
+
   return (
-    <Router>
-      <InitStyle />
-      <Layout>
-        <Switch>
-          <Route exact path="/" component={HomeView} />
-          <Route path="/todo" component={TodoView} />
-          <Redirect to="/" />
-        </Switch>
-      </Layout>
-    </Router>
+    <Reducer.Provider value={{ props, dispatch }}>
+      <Context.Provider value={{ commonCount, setCommonCount }}>
+        <BrowserRouter>
+          <InitStyle />
+          <Layout>
+            <Switch>
+              <Route exact path="/" component={HomeView} />
+              <Route path="/todo" component={TodoView} />
+              <Redirect to="/" />
+            </Switch>
+          </Layout>
+        </BrowserRouter>
+      </Context.Provider>
+    </Reducer.Provider>
   );
 }
 

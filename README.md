@@ -145,3 +145,238 @@ const Form = () => {
 }
 
 ```
+
+### 3일차 (2019년 10월 07일)
+
+> 주요 내용:
+>
+> 1. routing ( use React Route Dom v4 )
+> 2. useEffect ( 중요 )
+> 3. useRef, useCallback, useMemo
+> 4. useContext, useReducer
+> 5. SEO를 해결하기 위한 SSR의 문제점과 다른 방안
+
+1. 리액트에서 Routing은 기존 우리가 알고 있는 Routing과는 다릅니다. SPA(Single Page Application)으로 하나의 index.html을 보유하고 있고 시스템 적으로 화면을 전환시키는 것입니다. ( 이런점으로 인한 SEO 이슈가 발생 )
+
+```bash
+# 설치
+yarn add react-router-dom
+
+or
+
+npm install react-router-dom
+```
+
+```javascript
+// src/App.js
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
+<BrowserRouter>
+  <InitStyle />
+  <Layout>
+    <Switch>
+      <Route exact path="/" component={HomeView} />
+      <Route exact path="/todo" component={TodoView} />
+      <Route path="/todo/:id" component={TodoView} />
+      <Redirect to="/" />
+    </Switch>
+  </Layout>
+</BrowserRouter>;
+```
+
+1. 여기서 주의해야 할 점은 BrowserRouter의 경우는 최상위에 존재하여 페이지등을 감싼상태이어야한다는 점
+2. 상위의 경로가 하위 경로와 초반 이름이 같을 때 ( 위의 예시에서 path="/"와 path="/todo" ) 완벽히 주소가 같을 때가 선택될 수 있게 "exact"를 명시해줘야합니다.
+3. 경로의 경우는 path="/todo/:id" 다음과 같이 id라는 params의 값으로 넘겨서 사용할 수 있습니다.
+
+```javascript
+// src/components/common/Header.js
+import { Link, NavLink } from "react-router-dom";
+<Menu>
+  <NavLink exact to="/">
+    Home
+  </NavLink>
+  <NavLink to="/todo">Todo</NavLink>
+</Menu>;
+```
+
+- react-router-dom을 이용한 페이지 이동은 다음과 같이 "Link"와 "NavLink"를 이용할 수 있습니다.
+- 여기서 "Link"와 "NavLink"의 차이점은 "NavLink"의 경우는 해당 경로가 설정된 to와 같다면 자동적으로 class명으로 active가 생성됩니다. ( 설정에 의해 class명 변경가능 )
+
+2. useEffect의 경우는 각각의 Component의 생명주기를 사용할 수 있게 해주며, 프로젝트 최적화에 사용됩니다.
+
+```javascript
+import React, { useEffect, useState } from "react";
+
+const Component = () => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.log("render에 의해 무족건 반응");
+  });
+
+  useEffect(() => {
+    console.log("mounted와 같은 효과로 Component가 처음 시작될때 한번 동작");
+
+    return () => {
+      console.log(
+        "unmounted와 같은 효과로 Component가 사용되지 않을 때 한번 동작"
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("watch 기능으로 count의 데이터가 변화할 때만 동작");
+  }, [count]);
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(prev => prev + 1)}>증가</button>
+    </div>
+  );
+};
+```
+
+- 다음과 같이 무족건, 한번, 일정한 값에 의해서 중각 작업등을 할 수 있게합니다.
+
+3. useRef, useCallback, useMemo
+
+```javascript
+// useRef
+import React, { useRef } from "react";
+
+const Component = () => {
+  const domRef = useRef(null);
+  const valueRef = useRef(0);
+
+  const handleCheck = () => {
+    valueRef.current += 1;
+    console.log(domRef.current, "domRef에 담긴 DOM을 확인 할 수 있습니다.");
+    console.log(
+      valueRef.current,
+      "valueRef에 담긴 변수값을 확인 할 수 있습니다."
+    );
+  };
+
+  return (
+    <div ref={domRef} onClick={handleCheck}>
+      DOM!
+    </div>
+  );
+};
+```
+
+- 리액트 함수내부에서 별도의 변수를 생성하고 사용하려하면 정상작동이 되지 않을때가 있습니다. 그때를 위해 변수값을 넣어 놓을 수 있는 useRef를 사용하시면 됩니다.
+
+```javascript
+// useCallback, useMemo
+import React, { useCallback, useMemo } from "react";
+
+const Component = () => {
+  const [count, setCount] = useState(0);
+
+  const handleCheck1 = useCallback(() => {
+    setCount(count + 1);
+    console.log(count);
+  }, []);
+
+  const handleCheck2 = () => {
+    setCount(count + 1);
+    console.log(count);
+  };
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={handleCheck1}>테스트 버튼1</button>
+      <button onClick={handleCheck2}>테스트 버튼2</button>
+    </div>
+  );
+};
+```
+
+- useCallback과 useMemo의 사용은 거의 같으니 useCallback에 대해서만 설명합니다.
+- 다음과 같이 내부 실행 함수를 useCallback으로 감쌀 수 있으며 []의 내부에 변수를 선언 또는 선언하지 않을 수 있습니다.
+- 동작은 useEffect와 같이 무족건, 한번, 일정 변수에 의한으로 제한 할 수 있으며, 그 설정에 의해서 내부에 쓰인 count의 값이 다르게 동작합니다. ( 즉 함수의 결과를 변수에 저장하는 것을 상황에 따라 동작하지 않게합니다. )
+- 즉, 위를 실행하여 버튼을 눌러보면 "테스트 버튼1"의 여러번 눌러도 1의 값만 나오게 됩니다. ( 내부의 count값이 계속 0이기 때문입니다. handleCheck1 함수가 생성될때 내부의 count가 0이고 그 함수는 업데이트 되지 않았기때문.. )
+
+4. useContext, useReducer
+
+```javascript
+// useContext
+// src/Root.js ( 설정시 )
+import React, { setState } from "react";
+
+export const Context = React.createContext({});
+
+const Root = () => {
+  const [state, setState] = useState(0);
+
+  return (
+    <Context.Provider value={{ state, setState }}>
+      <App />
+    </Context.Provider>
+  );
+};
+
+export default Root;
+
+// src/views/Home.js ( 사용시 )
+import React, { useContext } from "react";
+import { Context } from "../Root";
+
+const Component = () => {
+  const { state, setState } = useContext(Context);
+  return <div>{state}</div>;
+};
+```
+
+- 여기서 중요한것은 `Context`입니다. 생성 후 `최상위에서 <Context.Provider>로 이용`하여 둘주는것
+- 또하나는 value 값으로 지정한 것이 `Routing이 되어도 변환되지 않는 위치에서 생성한 state 값`이라는 것입니다.
+
+```javascript
+// useReducer
+// src/Root.js ( 설정시 )
+import React, { useReducer } from "react";
+
+export const Context = React.createContext({});
+
+const init = { count: 0 };
+const reducers = (state, action) => {
+  switch (action.type) {
+    "ADD": return { ...state, count: state.count + 1 };
+    "MINUS": return { ...state, count: state.count - 1 };
+    default: return state;
+  }
+}
+
+const Root = () => {
+  const [props, dispatch] = useReducer(reducers, init);
+
+  return (
+    <Context.Provider value={{ props, dispatch }}>
+      <App />
+    </Context.Provider>
+  );
+};
+
+export default Root;
+
+// src/views/Home.js ( 사용시 )
+import React, { useContext } from "react";
+import { Context } from "../Root";
+
+const Component = () => {
+  const { props, dispatch } = useContext(Context);
+  return <div>{state}</div>;
+};
+```
+
+- useContext와 크게 차이가 없지만 사용하는 변수 값이 `useState로 생성한 것이 아닌 초기값과 시행값을 이용`한 것입니다. 규모가 커지는 프로젝트에서는 다음과 같이 초기값과 설정한 type에 의한 계획적인 변경을 이용하시는게 더 좋다고 봅니다.
+
+5. SEO를 해결하기 위한 SSR의 문제점과 다른 방안
+
+- 보통 회사에서 SEO를 해결하기 위해서 NextJS, NuxtJS라는 Server Side Render를 이용하는 경우가 많습니다. 그 이유는 위에 간략하게 설명한것처럼 SPA 방식으로 되어 있기 때문입니다.
+- SPA의 동작은 하나의 index.html에 만들어진 DOM을 교체하는 방식으로 실존하는 파일은 1개입니다.
+- 현재 구글에서는 검색봇의 개선으로 체크가 가능하나 한국에서 네이버의 경우는 그렇지 않습니다. 즉 네이버에서 사이트 체크시 페이지가 1개만 존재한다고 판단합니다, 그래서 검색시 노출이 잘 안되는 이슈가 발생합니다.
+- 하지만 여기서 SSR을 도입하게 되면 생기는 문제점으로는, 서버의 비용이 증대, 개발자의 러닝커브 증대등이 있습니다.
+- 해결방안으로는 현재 prerender라는 것이 존재하며, 프로젝트를 빌드하여 생성된 내용을 자체 Crwaling하여 페이지의 존재를 확인하고 그 페이지를 실존하는 것처럼 폴더와 index.html파일들을 생성해줍니다.
