@@ -9,6 +9,7 @@ const HeaderComponent = () => {
       <Menu>
         <Item exact to="/">Home</Item>
         <Item to="/todo">Todo</Item>
+        <Item to="/theme">Theme</Item>
       </Menu>
     </Header>
   );

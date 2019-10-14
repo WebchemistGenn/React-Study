@@ -6,6 +6,7 @@ import reset from "styled-reset";
 import Layout from "./layouts/DefaultLayout";
 import HomeView from './views/Home';
 import TodoView from './views/Todo';
+import ThemeView from './views/Theme';
 
 import { Context } from "./Context";
 import { Reducer, reducers, init } from "./Reducer";
@@ -41,6 +42,7 @@ const App = () => {
             <Switch>
               <Route exact path="/" component={HomeView} />
               <Route path="/todo" component={TodoView} />
+              <Route path="/theme" component={ThemeView} />
               <Redirect to="/" />
             </Switch>
           </Layout>
