@@ -1,12 +1,12 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
 import Layout from "./layouts/DefaultLayout";
-import HomeView from './views/Home';
-import TodoView from './views/Todo';
-import ThemeView from './views/Theme';
+import HomeView from "./views/Home";
+import TodoView from "./views/Todo";
+import ThemeView from "./views/Theme";
 
 import { Context } from "./Context";
 import { Reducer, reducers, init } from "./Reducer";
@@ -14,7 +14,9 @@ import { Reducer, reducers, init } from "./Reducer";
 const InitStyle = createGlobalStyle`
   ${reset};
 
-  html, body, #root {
+  html,
+  body,
+  #root {
     height: 100%;
   }
 
@@ -50,6 +52,6 @@ const App = () => {
       </Context.Provider>
     </Reducer.Provider>
   );
-}
+};
 
 export default App;

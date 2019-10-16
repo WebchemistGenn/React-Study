@@ -2,17 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 // disabled 효과
-// useState를 이용해서 
+// useState를 이용해서
 
-const CheckboxComponent = (props) => {
-  return (
-    <Wrap>
-      <input type="checkbox" {...props} />
-      <div className="checkbox" />
-      <div>{props.label}</div>
-    </Wrap>
-  )
-}
+const CheckboxComponent = props => (
+  <Wrap>
+    <input type="checkbox" {...props} />
+    <div className="checkbox" />
+    <div>{props.label}</div>
+  </Wrap>
+);
 
 export default CheckboxComponent;
 
@@ -31,7 +29,7 @@ const Wrap = styled.label`
     width: 18px;
     height: 18px;
     margin-right: 5px;
-    border: 2px solid #0094FF;
+    border: 2px solid #0094ff;
   }
 
   input[type="checkbox"]:checked ~ div.checkbox {
@@ -42,7 +40,7 @@ const Wrap = styled.label`
       left: 50%;
       width: 10px;
       height: 10px;
-      background-color: #0094FF;
+      background-color: #0094ff;
       transform: translate(-50%, -50%);
     }
   }

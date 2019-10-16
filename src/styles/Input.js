@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const Input = ({ label = "", ...props }) => {
-
-  return (
-    <Wrap>
-      <Label>{label}</Label>
-      <InputStyle {...props} />
-    </Wrap>
-  )
-}
+const Input = ({ label = "", ...props }) => (
+  <Wrap>
+    <Label>{label}</Label>
+    <InputStyle {...props} />
+  </Wrap>
+);
 
 export default Input;
 
@@ -28,7 +25,7 @@ const InputStyle = styled.input`
   height: 40px;
   border: none;
   border-bottom: 1px solid #eee;
-  transition: border .2s ease-in;
+  transition: border 0.2s ease-in;
   outline: none;
 
   &:focus {

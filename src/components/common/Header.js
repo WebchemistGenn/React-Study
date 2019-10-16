@@ -2,18 +2,18 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-const HeaderComponent = () => {
-  return (
-    <Header>
-      <Title>Group Of Developers</Title>
-      <Menu>
-        <Item exact to="/">Home</Item>
-        <Item to="/todo">Todo</Item>
-        <Item to="/theme">Theme</Item>
-      </Menu>
-    </Header>
-  );
-}
+const HeaderComponent = () => (
+  <Header>
+    <Title>Group Of Developers</Title>
+    <Menu>
+      <Item exact to="/">
+        Home
+      </Item>
+      <Item to="/todo">Todo</Item>
+      <Item to="/theme">Theme</Item>
+    </Menu>
+  </Header>
+);
 
 export default HeaderComponent;
 
@@ -59,13 +59,13 @@ const Item = styled(NavLink)`
     width: 100%;
     height: 2px;
     margin: 0 auto;
-    background-color: #4CAA9F;
+    background-color: #4caa9f;
     transform: scaleX(0);
     transition: all 0.2s ease-in-out;
   }
 
   &.active {
-    color: #4CAA9F;
+    color: #4caa9f;
 
     &::before {
       transform: scaleX(1);

@@ -14,63 +14,82 @@ const TodoView = () => {
     // submit의 경우 페이지 변경이슈가 있어서 화면이 반짝거리면서 새로고침됩니다.  그것을 방지하기 위한 preventDefault,  자주 잊어먹고 오류를 못잡는 것중에 하나입니다. (중요)
     event.preventDefault();
     if (todo) {
-      setList(prev => [{ id: uuid(), content: todo, done: false, date: moment(now) }, ...prev]);
+      setList(prev => [
+        {
+          id: uuid(),
+          content: todo,
+          done: false,
+          date: moment(now)
+        },
+        ...prev
+      ]);
       setTodo("");
     }
-  }
+  };
 
   const handleCheck = id => {
     setList(prev => {
       prev.map(item => {
-        if (item.id === id) item.done = !item.done;
+        if (item.id === id) {
+          item.done = !item.done;
+        }
         return item;
       });
       return [...prev];
-    })
-  }
+    });
+  };
 
   const handleRemove = id => {
-    setList(prev => [...prev.filter(item => item.id !== id)])
-  }
+    setList(prev => [...prev.filter(item => item.id !== id)]);
+  };
 
   // 날짜를 구현하기 위한 배열
   const days = [-2, -1, 0, 1, 2];
 
   return (
-    <React.Fragment>
+    <>
       <Title>날짜별 TodoList 관리</Title>
       <Wrap>
         <Header onSubmit={handleSubmit}>
           {/* 할일을 입력할 수 있습니다. */}
-          <input type="text" name="todo" value={todo} onChange={event => setTodo(event.target.value)} placeholder="할일을 입력해주세요." />
+          <input
+            type="text"
+            name="todo"
+            value={todo}
+            onChange={event => setTodo(event.target.value)}
+            placeholder="할일을 입력해주세요."
+          />
         </Header>
         <Calender>
-          {
-            days.map(d => {
-              // moment를 이용하여 선택된 날짜 (now)에서 -2 ~ 2일이 추가된 값으로 변경합니다.
-              const day = moment(now).add(d, "days");
-              return (
-                <div key={d} className={d === 0 ? "active" : ""} onClick={() => setNow(day)}>
-                  <div className="week">{day.format("ddd").toUpperCase()}</div>
-                  <div className="day">{day.format("D")}</div>
-                  {d === 0 && <div className="month">{day.format("MMM").toUpperCase()}</div>}
-                </div>
-              );
-            })
-          }
+          {days.map(d => {
+            // moment를 이용하여 선택된 날짜 (now)에서 -2 ~ 2일이 추가된 값으로 변경합니다.
+            const day = moment(now).add(d, "days");
+            return (
+              <div key={d} className={d === 0 ? "active" : ""} onClick={() => setNow(day)}>
+                <div className="week">{day.format("ddd").toUpperCase()}</div>
+                <div className="day">{day.format("D")}</div>
+                {d === 0 && <div className="month">{day.format("MMM").toUpperCase()}</div>}
+              </div>
+            );
+          })}
         </Calender>
         <List>
-          {
-            list
-              .filter(item => item.date.diff(now, "days") === 0)
-              // .sort((a, b) => b.done - a.done)
-              .map(item => <Item key={item.id} data={item} onCheck={() => handleCheck(item.id)} onRemove={() => handleRemove(item.id)} />)
-          }
+          {list
+            .filter(item => item.date.diff(now, "days") === 0)
+            .sort((a, b) => b.done - a.done)
+            .map(item => (
+              <Item
+                key={item.id}
+                data={item}
+                onCheck={() => handleCheck(item.id)}
+                onRemove={() => handleRemove(item.id)}
+              />
+            ))}
         </List>
       </Wrap>
-    </React.Fragment>
+    </>
   );
-}
+};
 
 export default TodoView;
 
@@ -88,7 +107,7 @@ const Header = styled.form`
   align-items: center;
   height: 40px;
   margin-bottom: 10px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   z-index: 10;
 
   input {
@@ -96,13 +115,13 @@ const Header = styled.form`
     width: 100%;
     height: 100%;
     padding: 0 15px;
-    background-color: #1C2328;
-    color: #E7D45D;
+    background-color: #1c2328;
+    color: #e7d45d;
     outline: 0;
     font-size: 20px;
 
     &::placeholder {
-      color: #3F4550;
+      color: #3f4550;
     }
   }
 `;
@@ -112,8 +131,8 @@ const Wrap = styled.div`
   height: 736px;
   margin: 0 auto;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-  background-color: #3F4550;
-  color: #FFF;
+  background-color: #3f4550;
+  color: #fff;
 `;
 
 const Calender = styled.div`
@@ -123,7 +142,7 @@ const Calender = styled.div`
   height: 100px;
   padding: 0 15px;
   justify-content: space-between;
-  background-color: #1B2329;
+  background-color: #1b2329;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   z-index: 10;
 
@@ -143,7 +162,7 @@ const Calender = styled.div`
       font-size: 16px;
       font-weight: bold;
     }
-    
+
     div.day {
       display: flex;
       justify-content: center;
@@ -163,28 +182,28 @@ const Calender = styled.div`
     }
 
     &.active {
-      background-color: #5C6877;
+      background-color: #5c6877;
       height: 110px;
-      box-shadow: 0 0 7px rgba(0,0,0,0.2);
+      box-shadow: 0 0 7px rgba(0, 0, 0, 0.2);
     }
 
     &:not(.active) {
-      background-color: #1B2329;
+      background-color: #1b2329;
 
       div {
-        color: #3D4550;
+        color: #3d4550;
       }
     }
 
     &:first-of-type,
     &:last-of-type {
-      background-color: #39404B;
+      background-color: #39404b;
     }
   }
-`
+`;
 
 const List = styled.div`
   overflow-y: scroll;
   height: 586px;
-  /* background-color: #E7D45D; */
+  background-color: #e7d45d;
 `;

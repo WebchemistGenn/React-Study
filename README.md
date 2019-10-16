@@ -380,3 +380,159 @@ const Component = () => {
 - 현재 구글에서는 검색봇의 개선으로 체크가 가능하나 한국에서 네이버의 경우는 그렇지 않습니다. 즉 네이버에서 사이트 체크시 페이지가 1개만 존재한다고 판단합니다, 그래서 검색시 노출이 잘 안되는 이슈가 발생합니다.
 - 하지만 여기서 SSR을 도입하게 되면 생기는 문제점으로는, 서버의 비용이 증대, 개발자의 러닝커브 증대등이 있습니다.
 - 해결방안으로는 현재 prerender라는 것이 존재하며, 프로젝트를 빌드하여 생성된 내용을 자체 Crwaling하여 페이지의 존재를 확인하고 그 페이지를 실존하는 것처럼 폴더와 index.html파일들을 생성해줍니다.
+
+### Eslint
+
+```bash
+npm install --save-dev eslint eslint-config-prettier eslint-config-react eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks prettier
+
+or
+
+yarn add -D eslint eslint-config-prettier eslint-config-react eslint-plugin-prettier eslint-plugin-react eslint-plugin-react-hooks prettier
+```
+
+```json
+// .eslintrc.json
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jasmine": true,
+    "jest": true
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
+  "plugins": ["react", "react-hooks", "prettier"],
+  "rules": {
+    "react/display-name": 0,
+    "react/no-unescaped-entities": 0,
+    "react/prop-types": 0,
+    "no-undef": 0,
+    "no-console": 1,
+    "no-unused-vars": 1,
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": false,
+        "tabWidth": 2,
+        "printWidth": 120
+      }
+    ]
+  }
+}
+```
+
+```json
+// setting.json
+{
+  // ~ eslint setting
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": true,
+  // "eslint.alwaysShowStatus": true,
+  "eslint.packageManager": "yarn",
+  // "files.autoSave": "onFocusChange",
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "prettier.disableLanguages": ["js", "jsx", "ts", "tsx"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ]
+}
+```
+
+### Stylelint
+
+```bash
+npm install --save-dev stylelint stylelint-config-standard stylelint-config-styled-components stylelint-processor-styled-components
+
+or
+
+yarn add -D stylelint stylelint-config-standard stylelint-config-styled-components stylelint-processor-styled-components
+```
+
+```json
+// .stylelintrc.json
+{
+  "processors": ["stylelint-processor-styled-components"],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-styled-components"
+  ],
+  "syntax": "scss",
+  "rules": {
+    "color-hex-case": "lower",
+    "declaration-colon-newline-after": null,
+    "selector-pseudo-element-colon-notation": null,
+    "no-descending-specificity": null,
+    "value-list-comma-newline-after": null,
+    "rule-empty-line-before": [
+      "always",
+      {
+        "ignore": ["first-nested"]
+      }
+    ]
+  }
+}
+```
+
+```json
+// setting.json
+{
+  // ~ stylelint setting
+  "stylelint.enable": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
+}
+```
+
+### husky
+
+```bash
+npm install --save-dev husky
+
+or
+
+yarn add -D husky
+```
+
+```json
+// package.json
+{
+  "lint": "eslint './src/**/*.{js,jsx}' && stylelint './src/**/*.{js,jsx}'",
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  }
+}
+```
