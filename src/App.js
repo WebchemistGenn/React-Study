@@ -10,7 +10,7 @@ import ThemeView from "./views/Theme";
 
 import { Context } from "./Context";
 import { Reducer, reducers, init } from "./Reducer";
-
+console.log("!!!!!!!!");
 const InitStyle = createGlobalStyle`
   ${reset};
 
